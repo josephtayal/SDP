@@ -1,6 +1,7 @@
 /*
 Table H1
 Joseph Tayal
+Sharvari Dhile
 
 
 Citations
@@ -22,7 +23,10 @@ void LevelOne();
 void LevelTwo();
 void ChooseLevel();
 void DrawBoard();
+void Timer();
 
+
+// Sharvari Dhile
 void BackToMenu() {
     int x_position, y_position;
     int x_trash, y_trash;
@@ -43,9 +47,13 @@ void BackToMenu() {
     }
 }
 
+// Sharvari Dhile
 void ChooseLevel() {
     int x_position, y_position;
     int x_trash, y_trash;
+
+    FEHImage level_background;
+    level_background.Open("");
 
     // Waits for the user to touch the screen
     while(true) {
@@ -59,29 +67,37 @@ void ChooseLevel() {
         if (x_position >= 95 && x_position <= 155 && y_position >= 95 && y_position <= 155) {
             LevelOne();
         } else if (x_position >= 165 && x_position <= 235 && y_position >= 95 && y_position <= 155) {
-            LCD.Clear();
+            LevelTwo();
         }
     }
 }
 
-void DrawBoard() {
-    LCD.Clear();
-    LCD.SetBackgroundColor(BURLYWOOD);
-}
-
-
 void LevelOne() {
     LCD.Clear();
     LCD.SetBackgroundColor(BURLYWOOD);
+    LCD.Update();
+    Timer();
+    LCD.Update();
 }
 
-/*
 void LevelTwo() {
-    // DrawBoard function
-    // Other draw functions
+    LCD.Clear();
+    LCD.SetBackgroundColor(LIGHTGREEN);
+    LCD.Update();
 } 
-*/
 
+// Sharvari Dhile
+void Timer() {
+    int start = TimeNow();
+    int final = 0;
+    while(TimeNow() - start < 5) {
+        final = TimeNow() - start;
+        LCD.Clear();
+        LCD.WriteLine(final);
+    }
+}
+
+// Sharvari Dhile
 void PlayGame() {
     // Displays the screen to play the game
     LCD.Clear(BLACK);
@@ -100,6 +116,7 @@ void PlayGame() {
 
 } 
 
+// Sharvari Dhile
 void Stats() {
     // Displays the user stats
     LCD.Clear(BLACK);
@@ -114,6 +131,7 @@ void Stats() {
     LCD.Update();
 }
 
+// Sharvari Dhile
 void Instructions () {
     // Displays the instructions for the game
     LCD.Clear(BLACK);
@@ -126,6 +144,7 @@ void Instructions () {
     LCD.Update();
 }
 
+// Sharvari Dhile
 void Credits () {
     // Displays the credits
     LCD.Clear(BLACK);
@@ -140,9 +159,10 @@ void Credits () {
     LCD.Update();
 }
 
+// Sharvari Dhile
 void Menu() {
     LCD.SetFontColor(LIGHTCORAL);
-    LCD.FillRectangle(0,0,320,300);
+    LCD.FillRectangle(0,0,320,280);
 
     LCD.SetFontColor(WHITE);
     LCD.DrawRectangle(50, 30, 220, 30);
