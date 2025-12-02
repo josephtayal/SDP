@@ -4,41 +4,90 @@
 #include "FEHUtility.h"
 #include "FEHImages.h"
 
+// Function declarations
+void BackToMenu();
+void Menu();
+void Stats();
+void Instructions();
+void Credits();
+void PlayGame();
+
+void BackToMenu() {
+    int x_position, y_position;
+    int x_trash, y_trash;
+
+    // Waits for the user to touch the screen
+    while(true) {
+        // Wait for touch - use x and y
+        while (!LCD.Touch(&x_position,&y_position)) {}
+
+        // Touch - use x and y
+        while (LCD.Touch(&x_trash,&y_trash)) {}
+
+    // Brings user back to the main menu
+        if (x_position >= 50 && x_position <= 270 && y_position >= 200 && y_position <= 250) {
+            LCD.Clear();
+            Menu();
+        } 
+    }
+}
+
 void PlayGame() {
+    // Displays the screen to play the game
     LCD.Clear(BLACK);
     LCD.Update();
-    LCD.Write("Play the game");
+    LCD.WriteLine("Play the game");
+    LCD.WriteAt("Main Menu", 50, 200);
     LCD.Update();
+
+    BackToMenu();
+    LCD.Update();
+
 } 
 
 void Stats() {
+    // Displays the user stats
     LCD.Clear(BLACK);
     LCD.Update();
-    LCD.Write("Games Played: ");
+    LCD.WriteLine("Games Played: ");
+    LCD.WriteLine("Wins: ");
+    LCD.WriteLine("Losses: ");
+    LCD.WriteAt("Main Menu", 50, 200);
     LCD.Update();
-    LCD.Write("Wins: ");
-    LCD.Update();
-    LCD.Write("Losses: ");
+
+    BackToMenu();
     LCD.Update();
 }
 
 void Instructions () {
+    // Displays the instructions for the game
     LCD.Clear(BLACK);
     LCD.Update();
-    LCD.Write("Cut the Rope is a simple game. ");
+    LCD.Write("Cut the Rope is a simple game. The goal is to cut the rope that is connected to the candy and make sure the creature eats the candy.");
+    LCD.WriteAt("Main Menu", 50, 200);
+    LCD.Update();
+
+    BackToMenu();
     LCD.Update();
 }
 
 void Credits () {
+    // Displays the credits
     LCD.Clear(BLACK);
     LCD.Update();
     LCD.Write("Developers: ");
+    LCD.Write("Joe Tayal");
+    LCD.Write("Sharvari Dhile");
+    LCD.WriteAt("Main Menu", 50, 200);
+    LCD.Update();
+
+    BackToMenu();
     LCD.Update();
 }
 
 void Menu() {
-    LCD.SetFontColor(GREEN);
-    LCD.FillRectangle(0,0,320,320);
+    LCD.SetFontColor(LIGHTCORAL);
+    LCD.FillRectangle(0,0,320,300);
 
     LCD.SetFontColor(WHITE);
     LCD.DrawRectangle(50, 30, 220, 30);
@@ -56,18 +105,12 @@ void Menu() {
     LCD.DrawRectangle(50, 120, 220, 30);
     LCD.WriteAt("Credits", 85, 125);
     LCD.Update();
-}
 
-int main()
-{
     int x_position, y_position;
     int x_trash, y_trash;
 
-    Menu();
-
+    // Depending on where user touches, the program will proceed to a different page
     while(true) {
-        
-
         // Wait for touch - use x and y
         while (!LCD.Touch(&x_position,&y_position)) {}
 
@@ -85,8 +128,9 @@ int main()
         }
         LCD.Update();
     }
+}
 
-
-
-    
+int main()
+{
+    Menu();
 }
