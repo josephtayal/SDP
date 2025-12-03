@@ -25,17 +25,11 @@ class candy
     void Float();
     void Eatin();
 
-    void Draw()
-    {
-        /*Drawing the basic candy*/
-    }
 
-    void Fall()
-    {
-        float g, v;
 
-    }
 
+
+    
 
 };
 
