@@ -12,6 +12,30 @@ Citations
 #include "FEHUtility.h"
 #include "FEHImages.h"
 
+/*Define*/
+
+#define ROPEBROWN 0x8B5A2B
+
+/*Class Deffinitions*/
+class candy
+{
+    int x, y, bubblestatus;
+    void Draw();
+    void Fall();
+    void Float();
+    void Eatin();
+
+    void Draw()
+    {
+        
+    }
+
+
+};
+
+
+
+
 // Function declarations
 void BackToMenu();
 void Menu();
@@ -76,8 +100,26 @@ void LevelOne() {
     LCD.SetBackgroundColor(BURLYWOOD);
     LCD.Clear();
     LCD.Update();
-    Timer();
+    //Timer();
+    //LCD.Update();
+    /*Draw candy, creature, and rope*/
+
+    LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
+    LCD.DrawCircle(159,10,5);
+    LCD.FillCircle(159,10,5);
+    LCD.SetFontColor(BLUE);//Drawing peg
+    LCD.DrawCircle(159,10,2);
+    LCD.FillCircle(159,10,2);
+    LCD.SetFontColor(ROPEBROWN);//drawing rope
+    LCD.DrawLine(158,10,162,75);
+    LCD.DrawLine(159,10,163,75);
     LCD.Update();
+
+
+
+
+
+
 }
 
 void LevelTwo() {
