@@ -24,6 +24,7 @@ void LevelTwo();
 void ChooseLevel();
 void DrawBoard();
 void Timer();
+void DrawBubble();
 
 int CurrentGame = 1;
 
@@ -76,6 +77,7 @@ void LevelOne() {
     LCD.SetBackgroundColor(BURLYWOOD);
     LCD.Clear();
     LCD.Update();
+    DrawBubble();
     Timer();
     LCD.Update();
 }
@@ -88,12 +90,18 @@ void LevelTwo() {
     LCD.Update();
 } 
 
+void DrawBubble() {
+    FEHImage bubble;
+    bubble.Open("Bubble.png");
+    bubble.Draw(50, 50);
+}
+
 // Sharvari Dhile
 void Timer() {
     // Finds start time
     int start = TimeNow();
     // Uses start time to allow user to play until 30 seconds are reached
-    while(TimeNow() - start < 30 && CurrentGame != 0) {
+    while(TimeNow() - start <= 10 && CurrentGame != 0) {
         LCD.Clear();
         LCD.Write("Time: ");
         LCD.WriteLine(TimeNow() - start);
@@ -118,11 +126,14 @@ void PlayGame() {
     LCD.DrawCircle(200, 120, 35);
     LCD.WriteAt("1", 115, 110);
     LCD.WriteAt("2", 195, 110);
+    LCD.SetFontColor(BLACK);
+    LCD.DrawRectangle(105, 190, 150, 40);
     LCD.WriteAt("Main Menu", 115, 200);
     LCD.Update();
 
     ChooseLevel();
     BackToMenu();
+    
     LCD.Update();
 
 } 
@@ -135,6 +146,8 @@ void Stats() {
     LCD.WriteLine("Games Played: ");
     LCD.WriteLine("Wins: ");
     LCD.WriteLine("Losses: ");
+    LCD.SetFontColor(WHITE);
+    LCD.DrawRectangle(105, 190, 150, 40);
     LCD.WriteAt("Main Menu", 115, 200);
     LCD.Update();
 
@@ -148,6 +161,7 @@ void Instructions () {
     LCD.Clear(BLACK);
     LCD.Update();
     LCD.Write("Cut the Rope is a simple game. The goal is to cut the rope that is connected to the candy and make sure the creature eats the candy.");
+    LCD.DrawRectangle(105, 190, 150, 40);
     LCD.WriteAt("Main Menu", 115, 200);
     LCD.Update();
 
@@ -160,9 +174,10 @@ void Credits () {
     // Displays the credits
     LCD.Clear(BLACK);
     LCD.Update();
-    LCD.Write("Developers: ");
-    LCD.Write("Sharvari Dhile");
-    LCD.Write("Joe Tayal");
+    LCD.WriteLine("Developers: ");
+    LCD.WriteLine("Sharvari Dhile");
+    LCD.WriteLine("Joe Tayal");
+    LCD.DrawRectangle(105, 190, 150, 40);
     LCD.WriteAt("Main Menu", 115, 200);
     LCD.Update();
 
