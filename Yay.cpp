@@ -27,20 +27,16 @@ public:
 };
 
 
-    void candy::Draw()
+    void Draw()
     {
-        FEHImage Candy;
-        Candy.Open("Peppermint.png");
-        FEHImage CandyWithBubble;
-        CandyWithBubble.Open("PeppermintWithBubble");
-
-        if (bubblestatus == 0) {
-            Candy.Draw(x, y);
-        }
-        if (bubblestatus == 1) {
-            CandyWithBubble.Draw(x,y);
-        }
+        
     }
+
+
+};
+
+
+
 
 // Function declarations
 void BackToMenu();
@@ -55,6 +51,7 @@ void ChooseLevel();
 void DrawBoard();
 void Timer();
 void DrawBubble();
+void DrawRope();
 
 int CurrentGame = 1;
 
@@ -104,10 +101,9 @@ void ChooseLevel() {
 }
 
 void LevelOne() {
-    candy one;
-    one.bubblestatus == 0;
     LCD.SetBackgroundColor(BURLYWOOD);
     LCD.Clear();
+<<<<<<< Updated upstream
     LCD.Update();
     //Timer();
     //LCD.Update();
@@ -122,9 +118,17 @@ void LevelOne() {
     LCD.SetFontColor(ROPEBROWN);//drawing rope
     LCD.DrawLine(158,10,162,75);
     LCD.DrawLine(159,10,163,75);
-    one.Draw();
+=======
+    DrawBubble();
     LCD.Update();
+>>>>>>> Stashed changes
     LCD.Update();
+
+
+
+
+
+
 }
 
 void LevelTwo() {
@@ -140,7 +144,7 @@ void LevelTwo() {
 void DrawBubble() {
     FEHImage bubble;
     bubble.Open("Bubble.png");
-    bubble.Draw(150,72);
+    bubble.Draw(50,50);
 }
 
 
