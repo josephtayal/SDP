@@ -100,6 +100,7 @@ void ChooseLevel() {
 void LevelOne() {
     LCD.SetBackgroundColor(BURLYWOOD);
     LCD.Clear();
+<<<<<<< Updated upstream
     LCD.Update();
     //Timer();
     //LCD.Update();
@@ -114,6 +115,10 @@ void LevelOne() {
     LCD.SetFontColor(ROPEBROWN);//drawing rope
     LCD.DrawLine(158,10,162,75);
     LCD.DrawLine(159,10,163,75);
+=======
+    DrawBubble();
+    LCD.Update();
+>>>>>>> Stashed changes
     LCD.Update();
 
 
@@ -134,7 +139,7 @@ void LevelTwo() {
 void DrawBubble() {
     FEHImage bubble;
     bubble.Open("Bubble.png");
-    bubble.Draw(50, 50);
+    bubble.Draw(50,50);
 }
 
 // Sharvari Dhile
