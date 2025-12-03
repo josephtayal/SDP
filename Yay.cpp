@@ -11,11 +11,13 @@ Citations
 #include "FEHLCD.h"
 #include "FEHUtility.h"
 #include "FEHImages.h"
+
 /*Define*/
 
 #define ROPEBROWN 0x8B5A2B
 
 /*Class Deffinitions*/
+/*Joseph Tayal*/
 class candy
 {
 public: 
@@ -29,11 +31,10 @@ public:
 
     void Draw()
     {
-        
+
     }
 
 
-};
 
 
 
@@ -100,15 +101,9 @@ void ChooseLevel() {
     }
 }
 
-void LevelOne() {
-    LCD.SetBackgroundColor(BURLYWOOD);
-    LCD.Clear();
-<<<<<<< Updated upstream
-    LCD.Update();
-    //Timer();
-    //LCD.Update();
-    /*Draw candy, creature, and rope*/
-
+void DrawRope()
+{
+    /*Joseph Tayal*/
     LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
     LCD.DrawCircle(159,10,5);
     LCD.FillCircle(159,10,5);
@@ -118,11 +113,22 @@ void LevelOne() {
     LCD.SetFontColor(ROPEBROWN);//drawing rope
     LCD.DrawLine(158,10,162,75);
     LCD.DrawLine(159,10,163,75);
-=======
+
     DrawBubble();
     LCD.Update();
->>>>>>> Stashed changes
+}
+
+
+void LevelOne() {
+    LCD.SetBackgroundColor(BURLYWOOD);
+    LCD.Clear();
     LCD.Update();
+    
+    //Timer();
+    //LCD.Update();
+    /*Draw candy, creature, and rope*/
+    DrawRope();
+    
 
 
 
@@ -144,7 +150,7 @@ void LevelTwo() {
 void DrawBubble() {
     FEHImage bubble;
     bubble.Open("Bubble.png");
-    bubble.Draw(50,50);
+    bubble.Draw(50, 50);
 }
 
 
