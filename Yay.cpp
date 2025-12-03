@@ -25,6 +25,7 @@ void ChooseLevel();
 void DrawBoard();
 void Timer();
 
+int CurrentGame = 1;
 
 // Sharvari Dhile
 void BackToMenu() {
@@ -52,9 +53,6 @@ void ChooseLevel() {
     int x_position, y_position;
     int x_trash, y_trash;
 
-    FEHImage level_background;
-    level_background.Open("");
-
     // Waits for the user to touch the screen
     while(true) {
         // Wait for touch - use x and y
@@ -66,35 +64,45 @@ void ChooseLevel() {
     // Brings user to specific level
         if (x_position >= 95 && x_position <= 155 && y_position >= 95 && y_position <= 155) {
             LevelOne();
+            break;
         } else if (x_position >= 165 && x_position <= 235 && y_position >= 95 && y_position <= 155) {
             LevelTwo();
+            break;
         }
     }
 }
 
 void LevelOne() {
-    LCD.Clear();
     LCD.SetBackgroundColor(BURLYWOOD);
+    LCD.Clear();
     LCD.Update();
     Timer();
     LCD.Update();
 }
 
 void LevelTwo() {
-    LCD.Clear();
     LCD.SetBackgroundColor(LIGHTGREEN);
+    LCD.Clear();
+    LCD.Update();
+    Timer();
     LCD.Update();
 } 
 
 // Sharvari Dhile
 void Timer() {
+    // Finds start time
     int start = TimeNow();
-    int final = 0;
-    while(TimeNow() - start < 5) {
-        final = TimeNow() - start;
+    // Uses start time to allow user to play until 30 seconds are reached
+    while(TimeNow() - start < 30 && CurrentGame != 0) {
         LCD.Clear();
-        LCD.WriteLine(final);
+        LCD.Write("Time: ");
+        LCD.WriteLine(TimeNow() - start);
+        Sleep(0.1);
     }
+
+    int UserTime = TimeNow() - start;
+
+    // Fail function or currentgame variable is set to 1 in the actual gameplay
 }
 
 // Sharvari Dhile
@@ -102,6 +110,9 @@ void PlayGame() {
     // Displays the screen to play the game
     LCD.Clear(BLACK);
     LCD.Update();
+    FEHImage level_background;
+    level_background.Open("backgroundlevel.png");
+    level_background.Draw(0,0);
     LCD.WriteAt("Choose Level", 85, 30);
     LCD.DrawCircle(120, 120, 35);
     LCD.DrawCircle(200, 120, 35);
@@ -150,8 +161,8 @@ void Credits () {
     LCD.Clear(BLACK);
     LCD.Update();
     LCD.Write("Developers: ");
-    LCD.Write("Joe Tayal");
     LCD.Write("Sharvari Dhile");
+    LCD.Write("Joe Tayal");
     LCD.WriteAt("Main Menu", 115, 200);
     LCD.Update();
 
