@@ -21,7 +21,10 @@ Citations
 class candy
 {
 public: 
-    int x, y, bubblestatus;
+    int x, y, bubblestatus; 
+    // bubblestatus 0 if no bubble, 1 if bubble exists
+
+    candy();
     void Draw();
     void Fall();
     void Float();
@@ -34,7 +37,7 @@ void candy::Draw()
         FEHImage Candy;
         Candy.Open("Peppermint.png");
         FEHImage CandyWithBubble;
-        CandyWithBubble.Open("PeppermintWithBubble");
+        CandyWithBubble.Open("PeppermintWithBubble.png");
 
         if (bubblestatus == 0) {
             Candy.Draw(x, y);
@@ -42,10 +45,27 @@ void candy::Draw()
         if (bubblestatus == 1) {
             CandyWithBubble.Draw(x,y);
         }
+
+        LCD.Update();
         
     }
 
+void candy::Fall () {
+    float g = 0.7, v = 0;
+    LCD.SetFontColor(BURLYWOOD);
+    LCD.DrawCircle(x,y,5);
+    LCD.FillCircle(x,y,5);
+    v+=g;
+    y+=v;
+    Draw();  
+    LCD.Update();  
+}
 
+candy::candy() {
+    x = 162;
+    y = 75;
+    bubblestatus = 0;
+}
 
 
 // Function declarations
@@ -112,18 +132,31 @@ void ChooseLevel() {
 
 void LevelOne() {
     candy one;
-    one.bubblestatus == 0;
+    one.bubblestatus = 0;
     LCD.SetBackgroundColor(BURLYWOOD);
+    // Draw background
+    DrawRope();
+    one.Draw();
     LCD.Clear();
     LCD.Update();
+
+    while (one.y < 180) {
+        // Rope disappears
+        one.Fall();
+        DrawRope();
+        Sleep(0.01);
+    }
+
     //Timer();
     //LCD.Update();
     /*Draw candy, creature, and rope*/
 
-=======
+}
+
 void DrawRope()
 {
     /*Joseph Tayal*/
+    candy one;
     LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
     LCD.DrawCircle(159,10,5);
     LCD.FillCircle(159,10,5);
