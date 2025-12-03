@@ -27,7 +27,13 @@ class candy
 
     void Draw()
     {
-        
+        /*Drawing the basic candy*/
+    }
+
+    void Fall()
+    {
+        float g, v;
+
     }
 
 
@@ -49,6 +55,7 @@ void ChooseLevel();
 void DrawBoard();
 void Timer();
 void DrawBubble();
+void DrawRope();
 
 int CurrentGame = 1;
 
@@ -97,14 +104,8 @@ void ChooseLevel() {
     }
 }
 
-void LevelOne() {
-    LCD.SetBackgroundColor(BURLYWOOD);
-    LCD.Clear();
-    LCD.Update();
-    //Timer();
-    //LCD.Update();
-    /*Draw candy, creature, and rope*/
-
+void DrawRope()
+{
     LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
     LCD.DrawCircle(159,10,5);
     LCD.FillCircle(159,10,5);
@@ -115,6 +116,19 @@ void LevelOne() {
     LCD.DrawLine(158,10,162,75);
     LCD.DrawLine(159,10,163,75);
     LCD.Update();
+}
+
+
+void LevelOne() {
+    LCD.SetBackgroundColor(BURLYWOOD);
+    LCD.Clear();
+    LCD.Update();
+    
+    //Timer();
+    //LCD.Update();
+    /*Draw candy, creature, and rope*/
+    DrawRope();
+    
 
 
 
