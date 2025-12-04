@@ -21,7 +21,8 @@ Citations
 class candy
 {
 public: 
-    int x, y, bubblestatus; 
+    int x, bubblestatus; 
+    float y, v;
     // bubblestatus 0 if no bubble, 1 if bubble exists
 
     candy();
@@ -32,6 +33,7 @@ public:
 
 };
 
+// Sharvari Dhile
 void candy::Draw()
     {
         FEHImage Candy;
@@ -50,20 +52,30 @@ void candy::Draw()
         
     }
 
+// Both
 void candy::Fall () {
-    float g = 0.7, v = 0;
+    float g = 0.7;
     LCD.SetFontColor(BURLYWOOD);
-    LCD.DrawCircle(x,y,5);
-    LCD.FillCircle(x,y,5);
+    LCD.FillCircle(x,y,50);
     v+=g;
     y+=v;
     Draw();  
     LCD.Update();  
 }
 
+void candy::Float() {
+    LCD.SetFontColor(BURLYWOOD);
+    LCD.FillCircle(x,y,50);
+    y-=0.5;
+    Draw();  
+    LCD.Update();
+}
+
+// Sharvari Dhile
 candy::candy() {
-    x = 162;
-    y = 75;
+    x = 140;
+    y = 65;
+    v = 0;
     bubblestatus = 0;
 }
 
@@ -99,7 +111,7 @@ void BackToMenu() {
         while (LCD.Touch(&x_trash,&y_trash)) {}
 
     // Brings user back to the main menu
-        if (x_position >= 115 && x_position <= 270 && y_position >= 200 && y_position <= 250) {
+        if (x_position >= 100 && x_position <= 220 && y_position >= 10 && y_position <= 40) {
             LCD.Clear();
             Menu();
         } 
@@ -135,14 +147,14 @@ void LevelOne() {
     one.bubblestatus = 0;
     LCD.SetBackgroundColor(BURLYWOOD);
     // Draw background
+    LCD.Clear();
     DrawRope();
     one.Draw();
-    LCD.Clear();
     LCD.Update();
 
     while (one.y < 180) {
         // Rope disappears
-        one.Fall();
+        one.Float();
         DrawRope();
         Sleep(0.01);
     }
@@ -156,7 +168,6 @@ void LevelOne() {
 void DrawRope()
 {
     /*Joseph Tayal*/
-    candy one;
     LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
     LCD.DrawCircle(159,10,5);
     LCD.FillCircle(159,10,5);
@@ -166,13 +177,12 @@ void DrawRope()
     LCD.SetFontColor(ROPEBROWN);//drawing rope
     LCD.DrawLine(158,10,162,75);
     LCD.DrawLine(159,10,163,75);
-    one.Draw();
     LCD.Update();
 }
 
 void LevelTwo() {
     candy two;
-    two.bubblestatus == 1;
+    two.bubblestatus = 1;
     LCD.SetBackgroundColor(LIGHTGREEN);
     LCD.Clear();
     LCD.Update();
@@ -180,6 +190,7 @@ void LevelTwo() {
     LCD.Update();
 } 
 
+// Sharvari Dhile
 void DrawBubble() {
     FEHImage bubble;
     bubble.Open("Bubble.png");
@@ -213,15 +224,15 @@ void PlayGame() {
     level_background.Open("backgroundlevel.png");
     level_background.Draw(0,0);
     LCD.WriteAt("Choose Level", 85, 30);
-    LCD.DrawCircle(120, 120, 35);
-    LCD.DrawCircle(200, 120, 35);
+    LCD.DrawCircle(120, 120, 25);
+    LCD.DrawCircle(200, 120, 25);
     LCD.WriteAt("1", 115, 110);
     LCD.WriteAt("2", 195, 110);
-    LCD.SetFontColor(BLACK);
-    LCD.DrawRectangle(105, 190, 150, 40);
-    LCD.WriteAt("Main Menu", 115, 200);
+    LCD.DrawRectangle(95, 10, 120, 20);
+    LCD.WriteAt("Main Menu", 100, 10);
     LCD.Update();
 
+    // Change this to calculate the touch coordinates and call specific function
     ChooseLevel();
     BackToMenu();
     
@@ -234,12 +245,14 @@ void Stats() {
     // Displays the user stats
     LCD.Clear(BLACK);
     LCD.Update();
+    LCD.WriteLine(" ");
+    LCD.WriteLine(" ");
     LCD.WriteLine("Games Played: ");
     LCD.WriteLine("Wins: ");
     LCD.WriteLine("Losses: ");
     LCD.SetFontColor(WHITE);
-    LCD.DrawRectangle(105, 190, 150, 40);
-    LCD.WriteAt("Main Menu", 115, 200);
+    LCD.DrawRectangle(95, 10, 120, 20);
+    LCD.WriteAt("Main Menu", 100, 10);
     LCD.Update();
 
     BackToMenu();
@@ -251,9 +264,11 @@ void Instructions () {
     // Displays the instructions for the game
     LCD.Clear(BLACK);
     LCD.Update();
-    LCD.Write("Cut the Rope is a simple game. The goal is to cut the rope that is connected to the candy and make sure the creature eats the candy.");
-    LCD.DrawRectangle(105, 190, 150, 40);
-    LCD.WriteAt("Main Menu", 115, 200);
+    LCD.WriteLine(" ");
+    LCD.WriteLine(" ");
+    LCD.WriteLine("Cut the Rope is a simple game. The goal is to cut the rope that is connected to the candy and make sure the creature eats the candy.");
+    LCD.DrawRectangle(95, 10, 120, 20);
+    LCD.WriteAt("Main Menu", 100, 10);
     LCD.Update();
 
     BackToMenu();
@@ -265,11 +280,13 @@ void Credits () {
     // Displays the credits
     LCD.Clear(BLACK);
     LCD.Update();
+    LCD.WriteLine(" ");
+    LCD.WriteLine(" ");
     LCD.WriteLine("Developers: ");
     LCD.WriteLine("Sharvari Dhile");
     LCD.WriteLine("Joe Tayal");
-    LCD.DrawRectangle(105, 190, 150, 40);
-    LCD.WriteAt("Main Menu", 115, 200);
+    LCD.DrawRectangle(95, 10, 120, 20);
+    LCD.WriteAt("Main Menu", 100, 10);
     LCD.Update();
 
     BackToMenu();
