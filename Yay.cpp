@@ -15,6 +15,9 @@ Citations
 /*Define*/
 
 #define ROPEBROWN 0x8B5A2B
+#define ropelength 45
+#define bubblelocation 80
+#define creaturelocation 140
 
 /*Class Deffinitions*/
 /*Joseph Tayal*/
@@ -33,32 +36,34 @@ public:
 
 };
 
-// Sharvari Dhile
+// Sharvari Dhile/Joseph Tayal
 void candy::Draw()
     {
         FEHImage Candy;
         Candy.Open("Peppermint.png");
-        FEHImage Bubble;
-        Bubble.Open("Bubble.png");
+        FEHImage CandyWithBubble;
+        CandyWithBubble.Open("PeppermintWithBubble.png");
+        
 
         if (bubblestatus == 0) {
-            Candy.Draw(x, y);
+            Candy.Draw(x, y);//drawing normal candy
         }
         if (bubblestatus == 1) {
-            Candy.Draw(x, y);
-            Bubble.Draw(x,y+25);
-            bubblestatus = 0;
+            CandyWithBubble.Draw(x, y);//drawing candy with the bubble surrounding it
         }
 
         LCD.Update();
         
     }
 
-// Both
+
+
+
+// Joseph/Sharvari
 void candy::Fall () {
     float g = 0.7;
     LCD.SetFontColor(BURLYWOOD);
-    LCD.FillCircle(x+10,y+10,30);
+    LCD.FillCircle(x+22,y+22,15);
     v+=g;
     y+=v;
     Draw();  
@@ -67,8 +72,8 @@ void candy::Fall () {
 
 void candy::Float() {
     LCD.SetFontColor(BURLYWOOD);
-    LCD.FillCircle(x,y,50);
-    y-=0.5;
+    LCD.FillCircle(x+22,y+25,15);
+    y-=1.8;
     if (y < 0) {
         y = 0;
     }
@@ -77,10 +82,11 @@ void candy::Float() {
 }
 
 
+
 // Sharvari Dhile
 candy::candy() {
     x = 140;
-    y = 65;
+    y = ropelength-10;
     v = 0;
     bubblestatus = 0;
     bubblefalling = 0;
@@ -103,9 +109,21 @@ void DrawBubble();
 void DrawRope();
 void CutRope();
 void DrawCreature();
+void ClearBubble();
 
 int CurrentGame = 1;
 int RopeCutStatus = 0; // 0 if rope isn't cut, 1 if rope cut
+
+void ClearBubble()
+{//Joseph Tayal
+    LCD.SetFontColor(BURLYWOOD);
+    LCD.DrawCircle(135,bubblelocation,60);
+    LCD.FillCircle(135,bubblelocation,60);
+    LCD.Update();
+}
+
+
+
 
 // Sharvari Dhile
 void BackToMenu() {
@@ -191,7 +209,7 @@ void LevelOne() {
         while (LCD.Touch(&x_trash,&y_trash)) {}
 
         // Cuts the rope
-        if (x_position >= 155 && x_position <= 165 && y_position >= 5 && y_position <= 80) {
+        if (x_position >= 155 && x_position <= 165 && y_position >= 5 && y_position <= ropelength) {
             CutRope();
         }
     }
@@ -215,7 +233,7 @@ void LevelOne() {
 
 void LevelTwo() {
     candy two;
-    two.bubblestatus = 1;
+    two.bubblestatus = 0;
     int x_position, y_position;
     int x_trash, y_trash;
     int StartTime;
@@ -226,16 +244,19 @@ void LevelTwo() {
     DrawRope();
     two.Draw();
     DrawCreature();
+    DrawBubble();
     LCD.Update();
 
     StartTime = TimeNow();
     int Time = TimeNow() - StartTime;
     LCD.SetFontColor(BURLYWOOD);
-    LCD.FillRectangle(0,0,80,100);
+    LCD.FillRectangle(0,0,80,100);//clearing the timer
+    LCD.Update();
 
     LCD.SetFontColor(BLACK);
-    LCD.WriteAt("Timer: ", 0, 0);
+    LCD.WriteAt("Timer: ", 0, 0);//drawing the new time
     LCD.WriteAt(Time, 80, 0);
+    LCD.Update();
 
     while (RopeCutStatus == 0) {
         // Wait for touch - use x and y
@@ -250,30 +271,54 @@ void LevelTwo() {
         }
     }
 
-    while (two.y > 0 && two.bubblefalling == 0) {
-        // Rope disappears
+    while (two.y < bubblelocation-15 && two.bubblestatus == 0) {
         int Time = TimeNow() - StartTime;
-        LCD.SetFontColor(BURLYWOOD);
+        LCD.SetFontColor(BURLYWOOD);//clearing the clock
         LCD.FillRectangle(0,0,80,120);
 
         LCD.SetFontColor(BLACK);
-        LCD.WriteAt("Timer: ", 0, 0);
+        LCD.WriteAt("Timer: ", 0, 0);//writing the time
         LCD.WriteAt(Time, 80, 0);
 
+
+        DrawBubble();
         DrawRope();
         DrawCreature();
         two.Fall();
+        LCD.Update();
         Sleep(0.01);
 
         // Use touch to figure out when to pop bubble
     }
+    /*once the candy hits the bubble*/
+    ClearBubble();
+    while (!LCD.Touch(&x_trash,&y_trash))
+    {
+        DrawRope();
+        DrawCreature();
+        two.Float();
+        LCD.Update();
+        Sleep(0.01);
+    }
+
 } 
 
 void CutRope () {
     RopeCutStatus = 1;
     LCD.SetFontColor(BURLYWOOD);//drawing rope
-    LCD.DrawLine(158,5,162,75);
-    LCD.DrawLine(159,5,163,75);
+    LCD.DrawLine(157,10,161,ropelength);
+    LCD.DrawLine(158,10,162,ropelength);
+    LCD.DrawLine(159,10,163,ropelength);
+    LCD.DrawLine(160,10,164,ropelength);
+
+    /*Redrawing peg*/
+    LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
+    LCD.DrawCircle(159,10,5);
+    LCD.FillCircle(159,10,5);
+    LCD.SetFontColor(BLUE);//Drawing peg
+    LCD.DrawCircle(159,10,2);
+    LCD.FillCircle(159,10,2);
+   
 }
 
 void DrawRope()
@@ -288,8 +333,8 @@ void DrawRope()
 
     if (RopeCutStatus == 0) {
         LCD.SetFontColor(ROPEBROWN);//drawing rope
-        LCD.DrawLine(158,10,162,75);
-        LCD.DrawLine(159,10,163,75);
+        LCD.DrawLine(158,10,162,ropelength);
+        LCD.DrawLine(159,10,163,ropelength);
     }
 
     LCD.Update();
@@ -299,7 +344,9 @@ void DrawRope()
 void DrawBubble() {
     FEHImage bubble;
     bubble.Open("Bubble.png");
-    bubble.Draw(50,50);
+    bubble.Draw(135,bubblelocation);
+
+    
 }
 
 // Sharvari Dhile
