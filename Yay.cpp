@@ -438,11 +438,17 @@ void Credits () {
 
 // Sharvari Dhile
 void Menu() {
-    FEHImage background;
-    background.Open("IMG_0720.png");
-    background.Draw(0,0);
+    LCD.SetBackgroundColor(LIGHTBLUE);
+    LCD.Clear();
+    LCD.Update();
+
+    FEHImage creature;
+    creature.Open("OmNom.png");
+    creature.Draw(110, 140);
+    LCD.Update();
 
     LCD.SetFontColor(WHITE);
+    LCD.WriteAt("Cut the Rope", 85, 6);
     LCD.DrawRectangle(50, 30, 220, 30);
     LCD.WriteAt("Play Game", 85, 35);
     LCD.Update();
