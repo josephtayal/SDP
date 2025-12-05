@@ -392,8 +392,11 @@ void Credits () {
 // Sharvari Dhile
 void Menu() {
     FEHImage background;
-    background.Open("IMG_0720.png");
+    background.Open("MenuBackground.png");
     background.Draw(0,0);
+    FEHImage creature;
+    background.Open("OmNom.png");
+    background.Draw(120, 140);
 
     LCD.SetFontColor(WHITE);
     LCD.DrawRectangle(50, 30, 220, 30);
