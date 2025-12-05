@@ -61,7 +61,7 @@ void candy::Draw()
 
 // Joseph/Sharvari
 void candy::Fall () {
-    float g = 0.7;
+    float g = 0.9;
     LCD.SetFontColor(BURLYWOOD);
     LCD.FillCircle(x+22,y+22,15);
     v+=g;
@@ -71,6 +71,7 @@ void candy::Fall () {
 }
 
 void candy::Float() {
+    //Joseph Tayal
     LCD.SetFontColor(BURLYWOOD);
     LCD.FillCircle(x+24,y+27,22);
     y-=1.6;
@@ -293,22 +294,25 @@ void LevelTwo() {
     /*once the candy hits the bubble*/
     ClearBubble();
     two.bubblestatus=1;
-    while (!LCD.Touch(&x_trash,&y_trash)&&(two.y>0))
+    two.v=0;
+    int popped=0;
+    x_position=0;
+    y_position=0;
+    while (((!LCD.Touch(&x_trash,&y_trash))||(LCD.Touch(&x_position,&y_position)))&&(popped==0))
     {
         DrawRope();
         DrawCreature();
         two.Float();
         LCD.Update();
         Sleep(0.01);
+        if ((x_position>(two.x+5) && x_position<(two.x+40) && y_position>(two.y+10) && y_position<(two.y+50)))
+        {
+            popped=1;
+        }
     }
-    while (LCD.Touch(&x_position,&y_position)||(x_position>120 && x_position<140 && y_position>two.y && y_position<(two.y+20)))
-    {
-        DrawRope();
-        DrawCreature();
-        two.Float();
-        LCD.Update();
-        Sleep(0.01);
-    }
+    /*clearing leftover bubble candy*/
+    LCD.SetFontColor(BURLYWOOD);
+    LCD.FillCircle(two.x+24,two.y+27,22);
     //Bubble gets popped
     two.bubblestatus=0;
     while (two.y<130)
