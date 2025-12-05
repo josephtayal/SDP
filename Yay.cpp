@@ -407,6 +407,9 @@ void Stats() {
     // Displays the user stats
     LCD.Clear(BLACK);
     LCD.Update();
+    FEHImage background;
+    background.Open("PageBackground.png");
+    background.Draw(0, 0);
     LCD.WriteLine(" ");
     LCD.WriteLine(" ");
     LCD.WriteLine("Games Played: ");
@@ -426,6 +429,9 @@ void Instructions () {
     // Displays the instructions for the game
     LCD.Clear(BLACK);
     LCD.Update();
+    FEHImage background;
+    background.Open("PageBackground.png");
+    background.Draw(0, 0);
     LCD.WriteLine(" ");
     LCD.WriteLine(" ");
     LCD.WriteLine("Cut the Rope is a simple game. The goal is to cut the rope that is connected to the candy and make sure the creature eats the candy.");
@@ -442,6 +448,9 @@ void Credits () {
     // Displays the credits
     LCD.Clear(BLACK);
     LCD.Update();
+    FEHImage background;
+    background.Open("PageBackground.png");
+    background.Draw(0, 0);
     LCD.WriteLine(" ");
     LCD.WriteLine(" ");
     LCD.WriteLine("Developers: ");
