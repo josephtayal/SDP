@@ -49,7 +49,7 @@ void candy::Draw()
             Candy.Draw(x, y);//drawing normal candy
         }
         if (bubblestatus == 1) {
-            CandyWithBubble.Draw(x, y);//drawing candy with the bubble surrounding it
+            CandyWithBubble.Draw(x-3, y);//drawing candy with the bubble surrounding it
         }
 
         LCD.Update();
@@ -72,8 +72,8 @@ void candy::Fall () {
 
 void candy::Float() {
     LCD.SetFontColor(BURLYWOOD);
-    LCD.FillCircle(x+22,y+25,15);
-    y-=1.8;
+    LCD.FillCircle(x+24,y+27,22);
+    y-=1.6;
     if (y < 0) {
         y = 0;
     }
@@ -292,11 +292,30 @@ void LevelTwo() {
     }
     /*once the candy hits the bubble*/
     ClearBubble();
-    while (!LCD.Touch(&x_trash,&y_trash))
+    two.bubblestatus=1;
+    while (!LCD.Touch(&x_trash,&y_trash)&&(two.y>0))
     {
         DrawRope();
         DrawCreature();
         two.Float();
+        LCD.Update();
+        Sleep(0.01);
+    }
+    while (LCD.Touch(&x_position,&y_position)||(x_position>120 && x_position<140 && y_position>two.y && y_position<(two.y+20)))
+    {
+        DrawRope();
+        DrawCreature();
+        two.Float();
+        LCD.Update();
+        Sleep(0.01);
+    }
+    //Bubble gets popped
+    two.bubblestatus=0;
+    while (two.y<130)
+    {
+        DrawRope();
+        DrawCreature();
+        two.Fall();
         LCD.Update();
         Sleep(0.01);
     }
