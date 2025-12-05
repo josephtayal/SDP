@@ -217,11 +217,55 @@ void LevelOne() {
 void LevelTwo() {
     candy two;
     two.bubblestatus = 1;
-    LCD.SetBackgroundColor(LIGHTGREEN);
+    int x_position, y_position;
+    int x_trash, y_trash;
+    int StartTime;
+
+    LCD.SetBackgroundColor(BURLYWOOD);
+    // Draw background
     LCD.Clear();
+    DrawRope();
+    two.Draw();
+    DrawCreature();
     LCD.Update();
-    Timer();
-    LCD.Update();
+
+    StartTime = TimeNow();
+    int Time = TimeNow() - StartTime;
+    LCD.SetFontColor(BURLYWOOD);
+    LCD.FillRectangle(0,0,80,100);
+
+    LCD.SetFontColor(BLACK);
+    LCD.WriteAt("Timer: ", 0, 0);
+    LCD.WriteAt(Time, 80, 0);
+
+    while (RopeCutStatus == 0) {
+        // Wait for touch - use x and y
+        while (!LCD.Touch(&x_position,&y_position)) {}
+
+        // Touch - use x and y
+        while (LCD.Touch(&x_trash,&y_trash)) {}
+
+        // Cuts the rope
+        if (x_position >= 155 && x_position <= 165 && y_position >= 5 && y_position <= 80) {
+            CutRope();
+        }
+    }
+
+    while (two.y > 0) {
+        // Rope disappears
+        int Time = TimeNow() - StartTime;
+        LCD.SetFontColor(BURLYWOOD);
+        LCD.FillRectangle(0,0,80,120);
+
+        LCD.SetFontColor(BLACK);
+        LCD.WriteAt("Timer: ", 0, 0);
+        LCD.WriteAt(Time, 80, 0);
+
+        DrawRope();
+        DrawCreature();
+        two.Float();
+        Sleep(0.01);
+    }
 } 
 
 void CutRope () {
