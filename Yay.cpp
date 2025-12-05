@@ -56,7 +56,7 @@ void candy::Draw()
 void candy::Fall () {
     float g = 0.7;
     LCD.SetFontColor(BURLYWOOD);
-    LCD.FillCircle(x,y,50);
+    LCD.FillCircle(x+10,y+10,30);
     v+=g;
     y+=v;
     Draw();  
@@ -67,8 +67,16 @@ void candy::Float() {
     LCD.SetFontColor(BURLYWOOD);
     LCD.FillCircle(x,y,50);
     y-=0.5;
+    if (y < 0) {
+        y = 0;
+    }
     Draw();  
     LCD.Update();
+}
+
+// Sharvari Dhile
+void candy::Eatin() {
+    
 }
 
 // Sharvari Dhile
@@ -94,8 +102,11 @@ void DrawBoard();
 void Timer();
 void DrawBubble();
 void DrawRope();
+void CutRope();
+void DrawCreature();
 
 int CurrentGame = 1;
+int RopeCutStatus = 0; // 0 if rope isn't cut, 1 if rope cut
 
 // Sharvari Dhile
 void BackToMenu() {
@@ -116,6 +127,13 @@ void BackToMenu() {
             Menu();
         } 
     }
+}
+
+// Sharvari Dhile
+void DrawCreature() {
+    FEHImage creature;
+    creature.Open("OmNom.png");
+    creature.Draw(120, 140);
 }
 
 // Sharvari Dhile
@@ -145,39 +163,55 @@ void ChooseLevel() {
 void LevelOne() {
     candy one;
     one.bubblestatus = 0;
+    int x_position, y_position;
+    int x_trash, y_trash;
+    int StartTime;
+
     LCD.SetBackgroundColor(BURLYWOOD);
     // Draw background
     LCD.Clear();
     DrawRope();
     one.Draw();
+    DrawCreature();
     LCD.Update();
 
-    while (one.y < 180) {
-        // Rope disappears
-        one.Float();
-        DrawRope();
-        Sleep(0.01);
+    StartTime = TimeNow();
+    int Time = TimeNow() - StartTime;
+    LCD.SetFontColor(BURLYWOOD);
+    LCD.FillRectangle(0,0,80,100);
+
+    LCD.SetFontColor(BLACK);
+    LCD.WriteAt("Timer: ", 0, 0);
+    LCD.WriteAt(Time, 80, 0);
+
+    while (RopeCutStatus == 0) {
+        // Wait for touch - use x and y
+        while (!LCD.Touch(&x_position,&y_position)) {}
+
+        // Touch - use x and y
+        while (LCD.Touch(&x_trash,&y_trash)) {}
+
+        // Cuts the rope
+        if (x_position >= 155 && x_position <= 165 && y_position >= 5 && y_position <= 80) {
+            CutRope();
+        }
     }
 
-    //Timer();
-    //LCD.Update();
-    /*Draw candy, creature, and rope*/
+    while (one.y < 120) {
+        // Rope disappears
+        int Time = TimeNow() - StartTime;
+        LCD.SetFontColor(BURLYWOOD);
+        LCD.FillRectangle(0,0,80,120);
 
-}
+        LCD.SetFontColor(BLACK);
+        LCD.WriteAt("Timer: ", 0, 0);
+        LCD.WriteAt(Time, 80, 0);
 
-void DrawRope()
-{
-    /*Joseph Tayal*/
-    LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
-    LCD.DrawCircle(159,10,5);
-    LCD.FillCircle(159,10,5);
-    LCD.SetFontColor(BLUE);//Drawing peg
-    LCD.DrawCircle(159,10,2);
-    LCD.FillCircle(159,10,2);
-    LCD.SetFontColor(ROPEBROWN);//drawing rope
-    LCD.DrawLine(158,10,162,75);
-    LCD.DrawLine(159,10,163,75);
-    LCD.Update();
+        DrawRope();
+        DrawCreature();
+        one.Fall();
+        Sleep(0.01);
+    }
 }
 
 void LevelTwo() {
@@ -190,6 +224,32 @@ void LevelTwo() {
     LCD.Update();
 } 
 
+void CutRope () {
+    RopeCutStatus = 1;
+    LCD.SetFontColor(BURLYWOOD);//drawing rope
+    LCD.DrawLine(158,5,162,75);
+    LCD.DrawLine(159,5,163,75);
+}
+
+void DrawRope()
+{
+    /*Joseph Tayal*/
+    LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
+    LCD.DrawCircle(159,10,5);
+    LCD.FillCircle(159,10,5);
+    LCD.SetFontColor(BLUE);//Drawing peg
+    LCD.DrawCircle(159,10,2);
+    LCD.FillCircle(159,10,2);
+
+    if (RopeCutStatus == 0) {
+        LCD.SetFontColor(ROPEBROWN);//drawing rope
+        LCD.DrawLine(158,10,162,75);
+        LCD.DrawLine(159,10,163,75);
+    }
+
+    LCD.Update();
+}
+
 // Sharvari Dhile
 void DrawBubble() {
     FEHImage bubble;
@@ -197,20 +257,11 @@ void DrawBubble() {
     bubble.Draw(50,50);
 }
 
-
 // Sharvari Dhile
 void Timer() {
-    // Finds start time
     int start = TimeNow();
-    // Uses start time to allow user to play until 30 seconds are reached
-    while(TimeNow() - start <= 10 && CurrentGame != 0) {
-        LCD.Clear();
-        LCD.Write("Time: ");
-        LCD.WriteLine(TimeNow() - start);
-        Sleep(0.1);
-    }
-
-    int UserTime = TimeNow() - start;
+    LCD.SetFontColor(BLACK);
+    LCD.WriteAt(start, 10, 0);
 
     // Fail function or currentgame variable is set to 1 in the actual gameplay
 }
