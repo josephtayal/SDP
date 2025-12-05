@@ -21,7 +21,7 @@ Citations
 class candy
 {
 public: 
-    int x, bubblestatus; 
+    int x, bubblestatus, bubblefalling; 
     float y, v;
     // bubblestatus 0 if no bubble, 1 if bubble exists
 
@@ -38,14 +38,16 @@ void candy::Draw()
     {
         FEHImage Candy;
         Candy.Open("Peppermint.png");
-        FEHImage CandyWithBubble;
-        CandyWithBubble.Open("PeppermintWithBubble.png");
+        FEHImage Bubble;
+        Bubble.Open("Bubble.png");
 
         if (bubblestatus == 0) {
             Candy.Draw(x, y);
         }
         if (bubblestatus == 1) {
-            CandyWithBubble.Draw(x,y);
+            Candy.Draw(x, y);
+            Bubble.Draw(x,y+25);
+            bubblestatus = 0;
         }
 
         LCD.Update();
@@ -74,10 +76,6 @@ void candy::Float() {
     LCD.Update();
 }
 
-// Sharvari Dhile
-void candy::Eatin() {
-    
-}
 
 // Sharvari Dhile
 candy::candy() {
@@ -85,6 +83,7 @@ candy::candy() {
     y = 65;
     v = 0;
     bubblestatus = 0;
+    bubblefalling = 0;
 }
 
 
@@ -251,7 +250,7 @@ void LevelTwo() {
         }
     }
 
-    while (two.y > 0) {
+    while (two.y > 0 && two.bubblefalling == 0) {
         // Rope disappears
         int Time = TimeNow() - StartTime;
         LCD.SetFontColor(BURLYWOOD);
@@ -263,8 +262,10 @@ void LevelTwo() {
 
         DrawRope();
         DrawCreature();
-        two.Float();
+        two.Fall();
         Sleep(0.01);
+
+        // Use touch to figure out when to pop bubble
     }
 } 
 
@@ -390,8 +391,9 @@ void Credits () {
 
 // Sharvari Dhile
 void Menu() {
-    LCD.SetFontColor(LIGHTCORAL);
-    LCD.FillRectangle(0,0,320,280);
+    FEHImage background;
+    background.Open("IMG_0720.png");
+    background.Draw(0,0);
 
     LCD.SetFontColor(WHITE);
     LCD.DrawRectangle(50, 30, 220, 30);
