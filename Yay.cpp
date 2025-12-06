@@ -5,7 +5,8 @@ Sharvari Dhile
 
 
 Citations
-
+FEH SDP Simulator Libraries
+TAs, GTA, Professor
 */
 
 #include "FEHLCD.h"
@@ -20,7 +21,15 @@ Citations
 #define creaturelocation 140
 
 /*Class Deffinitions*/
-/*Joseph Tayal*/
+
+/* Author: Joseph Tayal
+This is the candy class
+It contains the x and y coordinates of the candy object
+It also has the status of the bubble
+It also has the Draw, Fall, and Float functions
+The purpose of this class is to control the candy objext
+All the variables and functions are public
+*/
 class candy
 {
 public: 
@@ -32,11 +41,24 @@ public:
     void Draw();
     void Fall();
     void Float();
-    void Eatin();
 
 };
 
-// Sharvari Dhile/Joseph Tayal
+/* Author: Sharvari Dhile
+This is the constructor of the candy object
+It sets all the variables to default values
+*/
+candy::candy() {
+    x = 140;
+    y = ropelength-10;
+    v = 0;
+    bubblestatus = 0;
+    bubblefalling = 0;
+}
+
+/* Author: Sharvari Dhile/Joseph Tayal
+This is the Draw function which draws the candy and bubble
+*/
 void candy::Draw()
     {
         FEHImage Candy;
@@ -56,10 +78,10 @@ void candy::Draw()
         
     }
 
-
-
-
-// Joseph/Sharvari
+/* Author: Joseph Tayal/Sharvari Dhile
+This is the Fall function which draws the candy falling
+The purpose of this function is to use gravity with the candy object
+*/
 void candy::Fall () {
     float g = 0.9;
     LCD.SetFontColor(BURLYWOOD);
@@ -70,8 +92,10 @@ void candy::Fall () {
     LCD.Update();  
 }
 
+/* Author: Joseph Tayal
+This is the Float function which draws the candy with bubble floating
+*/
 void candy::Float() {
-    //Joseph Tayal
     LCD.SetFontColor(BURLYWOOD);
     LCD.FillCircle(x+24,y+27,22);
     y-=1.6;
@@ -81,18 +105,6 @@ void candy::Float() {
     Draw();  
     LCD.Update();
 }
-
-
-
-// Sharvari Dhile
-candy::candy() {
-    x = 140;
-    y = ropelength-10;
-    v = 0;
-    bubblestatus = 0;
-    bubblefalling = 0;
-}
-
 
 // Function declarations
 void BackToMenu();
@@ -114,48 +126,34 @@ void ClearBubble();
 void WinScreen();
 void LoseScreen();
 
+// Variables
 int RopeCutStatus = 0; // 0 if rope isn't cut, 1 if rope cut
 int Wins, Loses, Games;
 
+/* Author: Joseph Tayal
+This function clears the previous bubble location
+*/
 void ClearBubble()
-{//Joseph Tayal
+{
     LCD.SetFontColor(BURLYWOOD);
     LCD.DrawCircle(135,bubblelocation,60);
     LCD.FillCircle(135,bubblelocation,60);
     LCD.Update();
 }
 
-
-
-
-// Sharvari Dhile
-void BackToMenu() {
-    int x_position, y_position;
-    int x_trash, y_trash;
-
-    // Waits for the user to touch the screen
-    while(true) {
-        // Wait for touch - use x and y
-        while (!LCD.Touch(&x_position,&y_position)) {}
-
-        // Touch - use x and y
-        while (LCD.Touch(&x_trash,&y_trash)) {}
-
-    // Brings user back to the main menu
-        if (x_position >= 100 && x_position <= 220 && y_position >= 10 && y_position <= 40) {
-            LCD.Clear();
-            Menu();
-        } 
-    }
-}
-
-// Sharvari Dhile
+/* Author: Sharvari Dhile
+This function adds the back to menu into the stats, instruction, and credits page
+*/
 void DrawCreature() {
     FEHImage creature;
     creature.Open("OmNom.png");
     creature.Draw(120, 140);
 }
 
+/*Author: Sharvari Dhile/Joseph Tayal
+This function is for level one of the game
+It draws everything on the screen and allows the user to cut the rope
+*/
 void LevelOne() {
     candy one;
     one.bubblestatus = 0;
@@ -216,6 +214,10 @@ void LevelOne() {
     WinScreen();
 }
 
+/*Author: Joseph Tayal/Sharvari Dhile
+This function is for level two of the game
+It draws everything on the screen and allows the user to cut the rope and pop the bubble
+*/
 void LevelTwo() {
     candy two;
     two.bubblestatus = 0;
@@ -258,6 +260,7 @@ void LevelTwo() {
         }
     }
 
+    // Author: Joseph Tayal
     while (two.y < bubblelocation-15 && two.bubblestatus == 0) {
         Time = TimeNow() - StartTime;
         LCD.SetFontColor(BURLYWOOD);
@@ -285,8 +288,22 @@ void LevelTwo() {
     int popped=0;
     x_position=0;
     y_position=0;
+
     while (((!LCD.Touch(&x_trash,&y_trash))||(LCD.Touch(&x_position,&y_position)))&&(popped==0))
     {
+        Time = TimeNow() - StartTime;
+        LCD.SetFontColor(BURLYWOOD);
+        LCD.FillRectangle(0,0,110,100);
+
+        LCD.SetFontColor(BLACK);
+        LCD.WriteAt("Timer: ", 0, 0);
+        LCD.WriteAt(Time, 80, 0);
+        LCD.Update();
+
+        if (two.y <= 0 ) {
+            LoseScreen();
+        }
+
         DrawRope();
         DrawCreature();
         two.Float();
@@ -311,8 +328,15 @@ void LevelTwo() {
         Sleep(0.01);
     }
 
+    if (popped == 1) {
+        WinScreen();
+    }
+
 } 
 
+/*Author: Sharvari Dhile/Joseph Tayal
+This function cuts the rope and also redraws the peg onto the screen
+*/
 void CutRope () {
     RopeCutStatus = 1;
     LCD.SetFontColor(BURLYWOOD);//drawing rope
@@ -331,9 +355,11 @@ void CutRope () {
    
 }
 
+/*Author: Joseph Tayal
+This function draws the rope onto the screen
+*/
 void DrawRope()
 {
-    /*Joseph Tayal*/
     LCD.SetFontColor(LIGHTSKYBLUE);//Drawing peg
     LCD.DrawCircle(159,10,5);
     LCD.FillCircle(159,10,5);
@@ -350,22 +376,19 @@ void DrawRope()
     LCD.Update();
 }
 
-// Sharvari Dhile
+/* Author: Sharvari Dhile
+This function draws the bubble on the screen
+*/
 void DrawBubble() {
     FEHImage bubble;
     bubble.Open("Bubble.png");
     bubble.Draw(135,bubblelocation);
 }
 
-// Sharvari Dhile
-void Timer() {
-    int start = TimeNow();
-    LCD.SetFontColor(BLACK);
-    LCD.WriteAt(start, 10, 0);
 
-    // Fail function or currentgame variable is set to 1 in the actual gameplay
-}
-
+/* Author: Sharvari Dhile
+This function shows the win screen if user wins the level
+*/
 void WinScreen() {
     Wins++;
     LCD.SetFontColor(BLACK);
@@ -374,6 +397,9 @@ void WinScreen() {
     Menu();
 }
 
+/* Author: Sharvari Dhile
+This function shows the lose screen if user loses the level
+*/
 void LoseScreen() {
     Loses++;
     LCD.SetFontColor(BLACK);
@@ -382,7 +408,32 @@ void LoseScreen() {
     Menu();
 }
 
-// Sharvari Dhile
+/* Author: Sharvari Dhile
+This function adds the back to menu into the stats, instruction, and credits page
+*/
+void BackToMenu() {
+    int x_position, y_position;
+    int x_trash, y_trash;
+
+    // Waits for the user to touch the screen
+    while(true) {
+        // Wait for touch - use x and y
+        while (!LCD.Touch(&x_position,&y_position)) {}
+
+        // Touch - use x and y
+        while (LCD.Touch(&x_trash,&y_trash)) {}
+
+    // Brings user back to the main menu
+        if (x_position >= 100 && x_position <= 220 && y_position >= 10 && y_position <= 40) {
+            LCD.Clear();
+            Menu();
+        } 
+    }
+}
+
+/* Author: Sharvari Dhile
+This function sets up the play game page with buttons for specific levels
+*/
 void PlayGame() {
     // Displays the screen to play the game
     LCD.Clear(BLACK);
@@ -427,7 +478,9 @@ void PlayGame() {
 
 } 
 
-// Sharvari Dhile
+/* Author: Sharvari Dhile
+This function sets up the statistics page
+*/
 void Stats() {
     // Displays the user stats
     LCD.Clear(BLACK);
@@ -452,7 +505,9 @@ void Stats() {
     LCD.Update();
 }
 
-// Sharvari Dhile
+/* Author: Sharvari Dhile
+This function sets up the instructions page
+*/
 void Instructions () {
     // Displays the instructions for the game
     LCD.Clear(BLACK);
@@ -473,7 +528,9 @@ void Instructions () {
     LCD.Update();
 }
 
-// Sharvari Dhile
+/* Author: Sharvari Dhile
+This function sets up the credits page
+*/
 void Credits () {
     // Displays the credits
     LCD.Clear(BLACK);
@@ -494,7 +551,9 @@ void Credits () {
     LCD.Update();
 }
 
-// Sharvari Dhile
+/* Author: Sharvari Dhile
+This function sets up the main menu page with the stats, instructions, credits, and play game
+*/
 void Menu() {
     LCD.SetBackgroundColor(LIGHTBLUE);
     LCD.Clear();
