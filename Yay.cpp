@@ -110,9 +110,11 @@ void DrawRope();
 void CutRope();
 void DrawCreature();
 void ClearBubble();
+void WinScreen();
+void LoseScreen();
 
-int CurrentGame = 1;
 int RopeCutStatus = 0; // 0 if rope isn't cut, 1 if rope cut
+int Wins, Loses, Games;
 
 void ClearBubble()
 {//Joseph Tayal
@@ -153,36 +155,15 @@ void DrawCreature() {
     creature.Draw(120, 140);
 }
 
-// Sharvari Dhile
-void ChooseLevel() {
-    int x_position, y_position;
-    int x_trash, y_trash;
-
-    // Waits for the user to touch the screen
-    while(true) {
-        // Wait for touch - use x and y
-        while (!LCD.Touch(&x_position,&y_position)) {}
-
-        // Touch - use x and y
-        while (LCD.Touch(&x_trash,&y_trash)) {}
-
-    // Brings user to specific level
-        if (x_position >= 95 && x_position <= 155 && y_position >= 95 && y_position <= 155) {
-            LevelOne();
-            break;
-        } else if (x_position >= 165 && x_position <= 235 && y_position >= 95 && y_position <= 155) {
-            LevelTwo();
-            break;
-        }
-    }
-}
-
 void LevelOne() {
     candy one;
     one.bubblestatus = 0;
+    RopeCutStatus = 0;
     int x_position, y_position;
     int x_trash, y_trash;
     int StartTime;
+
+    Games++;
 
     LCD.SetBackgroundColor(BURLYWOOD);
     // Draw background
@@ -195,11 +176,12 @@ void LevelOne() {
     StartTime = TimeNow();
     int Time = TimeNow() - StartTime;
     LCD.SetFontColor(BURLYWOOD);
-    LCD.FillRectangle(0,0,80,100);
+    LCD.FillRectangle(0,0,110,100);
 
     LCD.SetFontColor(BLACK);
     LCD.WriteAt("Timer: ", 0, 0);
     LCD.WriteAt(Time, 80, 0);
+    LCD.Update();
 
     while (RopeCutStatus == 0) {
         // Wait for touch - use x and y
@@ -215,28 +197,33 @@ void LevelOne() {
     }
 
     while (one.y < 120) {
-        // Rope disappears
-        int Time = TimeNow() - StartTime;
+        Time = TimeNow() - StartTime;
         LCD.SetFontColor(BURLYWOOD);
-        LCD.FillRectangle(0,0,80,120);
+        LCD.FillRectangle(0,0,110,100);
 
         LCD.SetFontColor(BLACK);
         LCD.WriteAt("Timer: ", 0, 0);
         LCD.WriteAt(Time, 80, 0);
+        LCD.Update();
 
         DrawRope();
         DrawCreature();
         one.Fall();
         Sleep(0.01);
     }
+
+    WinScreen();
 }
 
 void LevelTwo() {
     candy two;
     two.bubblestatus = 0;
+    RopeCutStatus = 0;
     int x_position, y_position;
     int x_trash, y_trash;
     int StartTime;
+
+    Games++;
 
     LCD.SetBackgroundColor(BURLYWOOD);
     // Draw background
@@ -250,11 +237,10 @@ void LevelTwo() {
     StartTime = TimeNow();
     int Time = TimeNow() - StartTime;
     LCD.SetFontColor(BURLYWOOD);
-    LCD.FillRectangle(0,0,80,100);//clearing the timer
-    LCD.Update();
+    LCD.FillRectangle(0,0,110,100);
 
     LCD.SetFontColor(BLACK);
-    LCD.WriteAt("Timer: ", 0, 0);//drawing the new time
+    LCD.WriteAt("Timer: ", 0, 0);
     LCD.WriteAt(Time, 80, 0);
     LCD.Update();
 
@@ -272,13 +258,14 @@ void LevelTwo() {
     }
 
     while (two.y < bubblelocation-15 && two.bubblestatus == 0) {
-        int Time = TimeNow() - StartTime;
-        LCD.SetFontColor(BURLYWOOD);//clearing the clock
-        LCD.FillRectangle(0,0,80,120);
+        Time = TimeNow() - StartTime;
+        LCD.SetFontColor(BURLYWOOD);
+        LCD.FillRectangle(0,0,110,100);
 
         LCD.SetFontColor(BLACK);
-        LCD.WriteAt("Timer: ", 0, 0);//writing the time
+        LCD.WriteAt("Timer: ", 0, 0);
         LCD.WriteAt(Time, 80, 0);
+        LCD.Update();
 
 
         DrawBubble();
@@ -345,8 +332,6 @@ void DrawBubble() {
     FEHImage bubble;
     bubble.Open("Bubble.png");
     bubble.Draw(135,bubblelocation);
-
-    
 }
 
 // Sharvari Dhile
@@ -356,6 +341,22 @@ void Timer() {
     LCD.WriteAt(start, 10, 0);
 
     // Fail function or currentgame variable is set to 1 in the actual gameplay
+}
+
+void WinScreen() {
+    Wins++;
+    LCD.SetFontColor(BLACK);
+    LCD.WriteAt("You Won!", 100, 100);
+    Sleep(1500);
+    Menu();
+}
+
+void LoseScreen() {
+    Loses++;
+    LCD.SetFontColor(BLACK);
+    LCD.WriteAt("You Lost...", 100, 100);
+    Sleep(1500);
+    Menu();
 }
 
 // Sharvari Dhile
@@ -375,9 +376,29 @@ void PlayGame() {
     LCD.WriteAt("Main Menu", 100, 10);
     LCD.Update();
 
-    // Change this to calculate the touch coordinates and call specific function
-    ChooseLevel();
-    BackToMenu();
+    int x_position, y_position;
+    int x_trash, y_trash;
+
+    // Waits for the user to touch the screen
+    while(true) {
+        // Wait for touch - use x and y
+        while (!LCD.Touch(&x_position,&y_position)) {}
+
+        // Touch - use x and y
+        while (LCD.Touch(&x_trash,&y_trash)) {}
+
+    // Brings user to specific level
+        if (x_position >= 95 && x_position <= 155 && y_position >= 95 && y_position <= 155) {
+            LevelOne();
+            break;
+        } else if (x_position >= 165 && x_position <= 235 && y_position >= 95 && y_position <= 155) {
+            LevelTwo();
+            break;
+        } else if (x_position >= 100 && x_position <= 220 && y_position >= 10 && y_position <= 40) {
+            LCD.Clear();
+            Menu();
+        }
+    }
     
     LCD.Update();
 
@@ -394,8 +415,11 @@ void Stats() {
     LCD.WriteLine(" ");
     LCD.WriteLine(" ");
     LCD.WriteLine("Games Played: ");
+    LCD.WriteAt(Games, 160, 35);
     LCD.WriteLine("Wins: ");
+    LCD.WriteAt(Wins, 60, 55);
     LCD.WriteLine("Losses: ");
+    LCD.WriteAt(Loses, 85, 70);
     LCD.SetFontColor(WHITE);
     LCD.DrawRectangle(95, 10, 120, 20);
     LCD.WriteAt("Main Menu", 100, 10);
@@ -415,7 +439,9 @@ void Instructions () {
     background.Draw(0, 0);
     LCD.WriteLine(" ");
     LCD.WriteLine(" ");
+    LCD.SetFontScale(0.5);
     LCD.WriteLine("Cut the Rope is a simple game. The goal is to cut the rope that is connected to the candy and make sure the creature eats the candy.");
+    LCD.SetFontScale(1);
     LCD.DrawRectangle(95, 10, 120, 20);
     LCD.WriteAt("Main Menu", 100, 10);
     LCD.Update();
