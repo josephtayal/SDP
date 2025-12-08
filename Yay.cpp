@@ -328,9 +328,7 @@ void LevelTwo() {
         Sleep(0.01);
     }
 
-    if (popped == 1) {
-        WinScreen();
-    }
+    WinScreen();
 
 } 
 
